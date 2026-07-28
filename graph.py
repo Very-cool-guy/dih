@@ -1,17 +1,15 @@
-import Operators
-
 class Node:
     _count = 1
 
-    def __init__(self, op, name = "", nice = 0, l_edge = None, ul_edge = None):
+    def __init__(self, op, name, nice):
         self.instance_num = Node._count
         Node._count += 1
 
         self.op = op
-        self.name = name
-        self.nice = nice
-        self.l_edge = l_edge if l_edge is not None else {}
-        self.ul_edge = ul_edge if ul_edge is not None else []
+        self.name = name if name is not None else ""
+        self.nice = nice if nice is not None else 0
+        self.l_edge = {}
+        self.ul_edge = []
         self.minargs = op.minargs
         self.req_kwargs = op.req_kwargs
 

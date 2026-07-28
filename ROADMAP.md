@@ -9,3 +9,4 @@
 - [ ] subgraphs(functions)
 - [ ] python standard library integration
 - [ ] graph visualisation tool (hard)
+- [ ] syntax for changing minargs and req_kwargs
