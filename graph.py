@@ -1,11 +1,9 @@
-class Operator:
-    def __init__(self, minargs):
-        self.minargs = minargs # placeholder
+import Operators
 
 class Node:
     _count = 1
 
-    def __init__(self, op, name = "", nice = 0, l_edge = None, ul_edge = None, minargs = -1):
+    def __init__(self, op, name = "", nice = 0, l_edge = None, ul_edge = None):
         self.instance_num = Node._count
         Node._count += 1
 
@@ -14,7 +12,14 @@ class Node:
         self.nice = nice
         self.l_edge = l_edge if l_edge is not None else {}
         self.ul_edge = ul_edge if ul_edge is not None else []
-        self.minargs = max(minargs, op.minargs)
+        self.minargs = op.minargs
+        self.req_kwargs = op.req_kwargs
+
+    def change_args(self, n_minargs):
+        self.minargs = max(n_minargs, self.op.minargs)
+
+    def change_kwargs(self, n_kwargs):
+        self.req_kwargs = list(set(self.op.req_kwargs + n_kwargs))
 
 class Graph:
     def __init__(self):
