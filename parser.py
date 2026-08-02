@@ -2,6 +2,12 @@ import graph, operators
 
 import re
 
+def _add(l, elem, pos):
+    if len(l) <= pos:
+        l.append(elem)
+    else:
+        l[pos] = elem
+
 def parse(source):
     result = graph.Graph()
 
@@ -11,13 +17,12 @@ def parse(source):
     source = [(len(line) - len(line.lstrip(' ')), line.lstrip(' ')) for line in source.split("\n") if line]
     assert source[0][0] == 0
 
-    last_nodeid = 0
     last_indents = []
     last_indent_num = -1
 
     for indent, content in source:
         norm_match = re.search(norm_pattern, content)
-        arrow_match = re.search(arrow_pattern, content)
+        arrow_match = re.search(arrow_pattern, content) #TODO: this currently extracts the brackets as well
 
         if norm_match:
             in_ledge, node_name, nice, op = [norm_match.group(i) for i in range(1, 5)]
@@ -25,22 +30,60 @@ def parse(source):
             if not indent:
                 if in_ledge is not None:
                     raise SyntaxError("top-level node can not label arrows pointing towards it")
-                new_node = Graph.Node(operators.operators[op.strip()], node_name, nice)
+                new_node = graph.Node(operators.operators[op.strip()], node_name, nice)
                 result.add_node(new_node)
+                new_id = new_node.instance_num
 
                 last_indent_num = 0 
-                new_node_id = new_node.instance_num
-                last_nodeid = new_node_id
-                last_indents = [new_node_id] # pop everything from the last indent registry
+                last_indents = [new_id] # pop everything from the last indent registry
 
-            ...
+            elif indent <= last_indent_num + 1: # this handles both one more indent and less indents
+                new_node =  graph.Node(operators.operators[op.strip()], node_name, nice)
+                result.add_node(new_node)
+                new_id = new_node.instance_num
+                last_id = last_indents[indent - 1]
+                
+                if in_ledge is not None: # TODO: extract this to a function
+                    result.connect(last_id, new_id, labeled = True, text = in_ledge)
+                else:
+                    result.connect(last_id, new_id)
+
+                last_indent_num = indent
+                _add(last_indents, new_id, indent)
+
+            else:
+                raise SyntaxError("cannot indent more than one space more than previous line")
+
 
         elif arrow_match:
             if not indent:
                 raise SyntaxError("top-level node can not use arrow notation")
+
+            elif indent <= last_indent_num + 1:
+                arrow, in_ledge, node_name = [arrow_match.group(i) for i in range(1,4)]
+                old_id = last_indents[indent - 1]
+                new_id = result.registry[node_name]
+
+                if arrow == "->":
+                    if in_ledge is not None:
+                        result.connect(old_id, new_id, labeled = True, text = in_ledge)
+                    else:
+                        result.connect(old_id, new_id)
+                    
+                    _add(last_indents, new_id, indent) # not necessarily indented the same as where the node was declared
+
+                elif arrow == "<-":
+                    if in_ledge is not None:
+                        result.connect(new_id, old_id, labeled = True, text = in_ledge)
+                    else:
+                        result.connect(new_id, old_id)
+
+                    _add(last_indents, old_id, indent) # same node even though indented one more space
+
             else:
-                ...
+                raise SyntaxError("cannot indent more than one space more than previous line")
 
         else:
             raise SyntaxError("parsing failure")
-
+        
+    return result
