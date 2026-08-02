@@ -32,11 +32,11 @@ class Graph:
             else:
                 self.registry[node.name] = node.instance_num
 
-    def connect(self, node_num1, node_num2, labeled = False, text = ""):
+    def connect(self, node_num1, node_num2, text = None):
         if node_num1 not in self.nodes or node_num2 not in self.nodes:
             raise NameError("node does not exist")
         else:
-            if labeled:
+            if text is not None:
                 self.nodes[node_num1].l_edge[text] = node_num2
             else:
                 self.nodes[node_num1].ul_edge.append(node_num2)
