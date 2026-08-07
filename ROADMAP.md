@@ -9,4 +9,8 @@
 - [ ] subgraphs(functions)
 - [ ] python standard library integration
 - [ ] graph visualisation tool (hard)
+- [ ] turn into compiler
+
+# smol
 - [ ] syntax for changing minargs and req_kwargs
+- [ ] lines with standalone names or arrows with names on both sides

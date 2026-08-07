@@ -22,14 +22,16 @@ def parse(source):
 
     for indent, content in source:
         norm_match = re.search(norm_pattern, content)
-        arrow_match = re.search(arrow_pattern, content) #TODO: this currently extracts the brackets as well
+        arrow_match = re.search(arrow_pattern, content)
            
         if arrow_match: # arrow match first otherwise will be consumed by .+ in the normal pattern
             if not indent:
                 raise SyntaxError("top-level node can not use arrow notation")
 
-            elif indent <= last_indent_num + 1:
-                arrow, in_ledge, node_name = [arrow_match.group(i) for i in range(1,4)]
+            elif indent <= last_indent_num + 1: # this handles both one more indent and less indents
+                vals = [arrow_match.group(i) for i in range(1, 4)]
+                arrow, in_ledge, node_name = [val[1:-1] if i != 1 and val is not None else val for i, val in enumerate(vals, start=1)] # bad code!!!
+
                 old_id = last_indents[indent - 1]
                 new_id = result.registry[node_name]
 
@@ -46,7 +48,8 @@ def parse(source):
 
 
         elif norm_match:
-            in_ledge, node_name, nice, op = [norm_match.group(i) for i in range(1, 5)]
+            vals = [norm_match.group(i) for i in range(1, 5)]
+            in_ledge, node_name, nice, op = [val[1:-1] if i != 4 and val is not None else val for i, val in enumerate(vals, start=1)]
 
             if not indent:
                 if in_ledge is not None:
@@ -58,7 +61,7 @@ def parse(source):
                 last_indent_num = 0 
                 last_indents = [new_id] # pop everything from the last indent registry
 
-            elif indent <= last_indent_num + 1: # this handles both one more indent and less indents
+            elif indent <= last_indent_num + 1:
                 new_node =  graph.Node(operators.operators[op.strip()], node_name, nice)
                 result.add_node(new_node)
                 new_id = new_node.instance_num

@@ -7,11 +7,14 @@ class Node:
 
         self.op = op
         self.name = name if name is not None else ""
-        self.nice = nice if nice is not None else 0
+        self.nice = int(nice) if nice is not None else 0
         self.l_edge = {}
         self.ul_edge = []
         self.minargs = op.minargs
         self.req_kwargs = op.req_kwargs
+
+    def __repr__(self): # for my use!!!
+        return str(self.__dict__)
 
     def change_args(self, n_minargs):
         self.minargs = max(n_minargs, self.op.minargs)
@@ -23,6 +26,9 @@ class Graph:
     def __init__(self):
         self.nodes = {} #instance num to node
         self.registry = {} #name to instance num
+
+    def __repr__(self):
+        return '\n'.join(self.nodes[nodeid].__repr__() for nodeid in self.nodes)
 
     def add_node(self, node):
         self.nodes[node.instance_num] = node
