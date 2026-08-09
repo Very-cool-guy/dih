@@ -16,3 +16,5 @@
 - [ ] lines with standalone names or arrows with names on both sides
 - [ ] not possible for literal string to contain / or / to be an operator
 - [ ] niceness or #args gets syntax error if prefix 0
+- [ ] multiple same name arrows from a node
+- [ ] revamp readme im serious!!!

@@ -60,6 +60,7 @@ def parse(source):
 
                 last_indent_num = 0 
                 last_indents = [new_id] # pop everything from the last indent registry
+                result.active.add(new_id)
 
             elif indent <= last_indent_num + 1:
                 new_node =  graph.Node(operators.operators[op.strip()], node_name, nice, minargs, maxargs, req_kwargs)

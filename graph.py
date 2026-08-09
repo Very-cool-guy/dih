@@ -16,6 +16,9 @@ class Node:
         self.maxargs = min(op.maxargs, int(maxargs)) if maxargs else op.maxargs
         self.req_kwargs = op.req_kwargs | set(filter(len, req_kwargs.split(","))) if req_kwargs is not None else op.req_kwargs
 
+        self.l_args = {}
+        self.ul_args = []
+
     def __repr__(self): # for my use!!!
         return str(self.__dict__)
 
@@ -23,6 +26,7 @@ class Graph:
     def __init__(self):
         self.nodes = {} #instance num to node
         self.registry = {} #name to instance num
+        self.active = set()
 
     def __repr__(self):
         return '\n'.join(self.nodes[nodeid].__repr__() for nodeid in self.nodes)
