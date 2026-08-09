@@ -1,3 +1,6 @@
+inf = float('inf')
+empty = set()
+
 def staticclass(cls):
     for name, attr in list(cls.__dict__.items()):
         if callable(attr) and not name.startswith("__"):
@@ -10,11 +13,12 @@ class Utils:
         return [sum(args)], kwargs
 
 class Operator:
-    def __init__(self, f, minargs, req_kwargs): # all three are mandatory
+    def __init__(self, f, minargs, maxargs, req_kwargs): # all are mandatory
         self.f = f
         self.minargs = minargs
+        self.maxargs = maxargs
         self.req_kwargs = req_kwargs
 
 operators = {
-        "+": Operator(Utils.add, 2, [])
+        "+": Operator(Utils.add, 2, inf, empty)
         }

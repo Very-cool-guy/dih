@@ -1,7 +1,7 @@
 # basic
-- [ ] make basic graph and node class
-- [ ] make basic operator class
-- [ ] make basic source to graph parser
+- [x] make basic graph and node class
+- [x] make basic operator class
+- [x] make basic source to graph parser
 - [ ] make basic graph interpreter
 
 # refinement
@@ -12,5 +12,7 @@
 - [ ] turn into compiler
 
 # smol
-- [ ] syntax for changing minargs and req_kwargs
+- [x] syntax for changing minargs and req_kwargs
 - [ ] lines with standalone names or arrows with names on both sides
+- [ ] not possible for literal string to contain / or / to be an operator
+- [ ] niceness or #args gets syntax error if prefix 0

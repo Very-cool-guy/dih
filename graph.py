@@ -1,26 +1,23 @@
 class Node:
     _count = 1
 
-    def __init__(self, op, name, nice):
+    def __init__(self, op, name, nice, minargs, maxargs, req_kwargs):
         self.instance_num = Node._count
         Node._count += 1
 
         self.op = op
         self.name = name if name is not None else ""
         self.nice = int(nice) if nice is not None else 0
+
         self.l_edge = {}
         self.ul_edge = []
-        self.minargs = op.minargs
-        self.req_kwargs = op.req_kwargs
+
+        self.minargs = max(op.minargs, int(minargs)) if minargs else op.minargs # covers both empty string and None
+        self.maxargs = min(op.maxargs, int(maxargs)) if maxargs else op.maxargs
+        self.req_kwargs = op.req_kwargs | set(filter(len, req_kwargs.split(","))) if req_kwargs is not None else op.req_kwargs
 
     def __repr__(self): # for my use!!!
         return str(self.__dict__)
-
-    def change_args(self, n_minargs):
-        self.minargs = max(n_minargs, self.op.minargs)
-
-    def change_kwargs(self, n_kwargs):
-        self.req_kwargs = list(set(self.op.req_kwargs + n_kwargs))
 
 class Graph:
     def __init__(self):

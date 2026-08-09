@@ -11,7 +11,7 @@ def _add(l, elem, pos):
 def parse(source):
     result = graph.Graph()
 
-    norm_pattern = re.compile(r'^(?>(\(.+\))?(\[.+\])?(\{\d+\})?)(.+)$')
+    norm_pattern = re.compile(r'^(?>(\(.+\))?(\[.+\])?(\{\d+\})?)([^/]+)(?:/(\d*),(\d*),(.*))?$')
     arrow_pattern = re.compile(r'^(->|<-)(\(.+\))?(\[.+\])$')
 
     source = [(len(line) - len(line.lstrip(' ')), line.lstrip(' ')) for line in source.split("\n") if line]
@@ -48,13 +48,13 @@ def parse(source):
 
 
         elif norm_match:
-            vals = [norm_match.group(i) for i in range(1, 5)]
-            in_ledge, node_name, nice, op = [val[1:-1] if i != 4 and val is not None else val for i, val in enumerate(vals, start=1)]
+            vals = [norm_match.group(i) for i in range(1, 8)]
+            in_ledge, node_name, nice, op, minargs, maxargs, req_kwargs = [val[1:-1] if i < 4 and val is not None else val for i, val in enumerate(vals, start=1)]
 
             if not indent:
                 if in_ledge is not None:
                     raise SyntaxError("top-level node can not label arrows pointing towards it")
-                new_node = graph.Node(operators.operators[op.strip()], node_name, nice)
+                new_node = graph.Node(operators.operators[op.strip()], node_name, nice, minargs, maxargs, req_kwargs)
                 result.add_node(new_node)
                 new_id = new_node.instance_num
 
@@ -62,7 +62,7 @@ def parse(source):
                 last_indents = [new_id] # pop everything from the last indent registry
 
             elif indent <= last_indent_num + 1:
-                new_node =  graph.Node(operators.operators[op.strip()], node_name, nice)
+                new_node =  graph.Node(operators.operators[op.strip()], node_name, nice, minargs, maxargs, req_kwargs)
                 result.add_node(new_node)
                 new_id = new_node.instance_num
                 last_id = last_indents[indent - 1]
