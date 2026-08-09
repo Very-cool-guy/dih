@@ -11,7 +11,7 @@ def interpret(graph):
         for nodeid in sorted(graph.active, key = lambda _id: graph.nodes[_id].nice)[::-1]:
             node = graph.nodes[nodeid]
 
-            if len(node.ul_args) >= node.minargs and node.l_args.keys() >= node.req_kwargs.keys():
+            if len(node.ul_args) >= node.minargs and set(node.l_args.keys()) >= node.req_kwargs:
                 ul_result, l_result = node.op.f(_take(node.ul_args, node.maxargs), node.l_args) 
 
                 for targetid in node.ul_edge:

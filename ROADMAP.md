@@ -2,12 +2,13 @@
 - [x] make basic graph and node class
 - [x] make basic operator class
 - [x] make basic source to graph parser
-- [ ] make basic graph interpreter
+- [x] make basic graph interpreter
+YAYYYYYY
 
 # refinement
+- [ ] more operators including ones in the library, total library integration is probably impossible since i have to choose argument stuff
 - [ ] better errors
 - [ ] subgraphs(functions)
-- [ ] python standard library integration
 - [ ] graph visualisation tool (hard)
 - [ ] turn into compiler
 

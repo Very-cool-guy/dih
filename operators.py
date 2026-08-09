@@ -10,7 +10,7 @@ def staticclass(cls):
 @staticclass
 class Utils:
     def add(args, kwargs):
-        return [sum(args)], kwargs
+        return sum(args), kwargs
 
 class Operator:
     def __init__(self, f, minargs, maxargs, req_kwargs): # all are mandatory
