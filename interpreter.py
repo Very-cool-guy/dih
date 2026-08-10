@@ -14,14 +14,15 @@ def interpret(graph):
             if len(node.ul_args) >= node.minargs and set(node.l_args.keys()) >= node.req_kwargs:
                 ul_result, l_result = node.op.f(_take(node.ul_args, node.maxargs), node.l_args) 
 
-                for targetid in node.ul_edge:
-                    graph.nodes[targetid].ul_args.append(ul_result)
+                if ul_result is not None:
+                    for targetid in node.ul_edge:
+                        graph.nodes[targetid].ul_args.append(ul_result)
 
                 for text, targetid in node.l_edge:
-                    if text not in l_result:
-                        raise NameError("outcoming labelled arrow not produced by node")
-                    else:
+                    if text in l_result:
                         graph.nodes[targetid].l_args[text] = l_result[text]
+                    elif ul_result is not None:
+                        graph.nodes[targetid].l_args[text] = ul_result
 
                 lazy_nodes.remove(nodeid) # nodes that do not meet requirements stay
                 added_actives.update(node.ul_edge)

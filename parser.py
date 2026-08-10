@@ -37,10 +37,12 @@ def parse(source):
 
                 if arrow == "->":
                     result.connect(old_id, new_id, text = in_ledge)
+                    last_indent_num = indent
                     _add(last_indents, new_id, indent) # not necessarily indented the same as where the node was declared
 
                 elif arrow == "<-":
                     result.connect(new_id, old_id, text = in_ledge)
+                    last_indent_num = indent
                     _add(last_indents, old_id, indent) # same node even though indented one more space
 
             else:

@@ -3,6 +3,7 @@
 - [x] make basic operator class
 - [x] make basic source to graph parser
 - [x] make basic graph interpreter
+- [ ] make main wrapper
 YAYYYYYY
 
 # refinement
@@ -19,3 +20,7 @@ YAYYYYYY
 - [ ] niceness or #args gets syntax error if prefix 0
 - [ ] multiple same name arrows from a node
 - [ ] revamp readme im serious!!!
+- [ ] type hint (duh)
+- [x] (URGENT) change behaviour of unproduced labelled arrow from throwing an error to making giving the produced unlabeled result
+- [x] better way to allow empty returns
+- [ ] if and match
