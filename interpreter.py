@@ -1,4 +1,4 @@
-import sys
+import ast
 
 def _take(l, n):
     return l if len(l) <= n else l[:n]
@@ -14,24 +14,40 @@ def interpret(graph):
             if len(node.ul_args) >= node.minargs and set(node.l_args.keys()) >= node.req_kwargs:
                 ul_result, l_result = node.op.f(_take(node.ul_args, node.maxargs), node.l_args) 
 
-                if ul_result is not None:
-                    for targetid in node.ul_edge:
-                        graph.nodes[targetid].ul_args.append(ul_result)
+                if node.op.special_id == -2: # if TODO: should if only accept booleans or not?
+                    if ul_result:
+                        if "y" in node.l_edge:
+                            added_actives.add(node.l_edge["y"])
+                    else:
+                        if "n" in node.l_edge:
+                            added_actives.add(node.l_edge["n"])
 
-                for text, targetid in node.l_edge:
-                    if text in l_result:
-                        graph.nodes[targetid].l_args[text] = l_result[text]
-                    elif ul_result is not None:
-                        graph.nodes[targetid].l_args[text] = ul_result
+                elif node.op.special_id == -1: # case
+                    val_to_id = {ast.literal_eval(text) if text != "else" else "else" : _id for text, _id in node.l_edge.items()}
+                    if ul_result in val_to_id:
+                        added_actives.add(val_to_id[ul_result])
+                    elif "else" in val_to_id:
+                        added_actives.add(val_to_id["else"])
+
+                else:
+                    if ul_result is not None:
+                        for targetid in node.ul_edge:
+                            graph.nodes[targetid].ul_args.append(ul_result)
+
+                    for text, targetid in node.l_edge:
+                        if text in l_result:
+                            graph.nodes[targetid].l_args[text] = l_result[text]
+                        elif ul_result is not None:
+                            graph.nodes[targetid].l_args[text] = ul_result
+
+                    added_actives.update(node.ul_edge)
+                    added_actives.update(list(node.l_edge.values()))
 
                 lazy_nodes.remove(nodeid) # nodes that do not meet requirements stay
-                added_actives.update(node.ul_edge)
-                added_actives.update(list(node.l_edge.values()))
-
                 node.ul_args = []
                 node.l_args = {}
 
         if lazy_nodes or added_actives:
             graph.active = lazy_nodes | added_actives
         else:
-            sys.exit()
+            return

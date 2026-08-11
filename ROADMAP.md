@@ -23,4 +23,6 @@ YAYYYYYY
 - [ ] type hint (duh)
 - [x] (URGENT) change behaviour of unproduced labelled arrow from throwing an error to making giving the produced unlabeled result
 - [x] better way to allow empty returns
-- [ ] if and match
+- [x] if and match
+- [ ] match does not accept "else" or undictkeyable values
+- [ ] make match return a value
