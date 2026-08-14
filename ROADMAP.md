@@ -3,7 +3,8 @@
 - [x] make basic operator class
 - [x] make basic source to graph parser
 - [x] make basic graph interpreter
-- [ ] make main wrapper
+- [x] make main wrapper
+
 YAYYYYYY
 
 # refinement
