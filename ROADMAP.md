@@ -18,7 +18,6 @@ YAYYYYYY
 - [x] syntax for changing minargs and req_kwargs
 - [ ] lines with standalone names or arrows with names on both sides
 - [ ] not possible for literal string to contain / or / to be an operator
-- [ ] niceness or #args gets syntax error if prefix 0
 - [ ] multiple same name arrows from a node
 - [ ] revamp readme im serious!!!
 - [ ] type hint (duh)
@@ -26,4 +25,7 @@ YAYYYYYY
 - [x] better way to allow empty returns
 - [x] if and match
 - [ ] match does not accept "else" or undictkeyable values
-- [ ] make match return a value
+- [x] make match return a value
+- [ ] *? operator family
+- [ ] composition of nodes
+- [ ] ALSO URGENT `[hi]Lit[7]` matches wrongly, whole thing gets consumed by the bracket group. making it lazy makes bracket group not match anything at all.

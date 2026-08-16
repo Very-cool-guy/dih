@@ -5,11 +5,12 @@ inf = float('inf')
 empty = set()
 
 class Operator:
-    def __init__(self, f, minargs, maxargs, req_kwargs, special_id = 0): # all are mandatory
+    def __init__(self, f, minargs, maxargs, req_kwargs, name, special_id = 0):
         self.f = f
         self.minargs = minargs
         self.maxargs = maxargs
         self.req_kwargs = req_kwargs
+        self.name = name
         self.special_id = special_id
 
 class _CoolerDict(dict):
@@ -18,13 +19,13 @@ class _CoolerDict(dict):
             result = ast.literal_eval(key[4:-1])# TODO: think about expressions to disallow
             def f(args, kwargs):
                 return result, {}
-            return Operator(f, 0, inf, empty)
-        
-        raise NameError("unrecognized operator")
+            return Operator(f, 0, inf, empty, "Literal")
+        raise NameError()
 
 operators = _CoolerDict({
-        "+": Operator(Utils.add, 2, inf, empty),
-        "print": Operator(Utils._print, 1, inf, empty),
-        "match": Operator(Utils._match, 1, 1, empty, -1),
-        "if": Operator(Utils._if, 1, 1, empty, -2),
+        "+": Operator(Utils.add, 2, inf, empty, "+"),
+        "print": Operator(Utils._print, 1, inf, empty, "print"),
+        "input": Operator(Utils._input, 0, inf, empty, "input"),
+        "match": Operator(Utils._match, 1, 1, empty, "match", -1),
+        "if": Operator(Utils._if, 1, 1, empty, "if", -2),
         })

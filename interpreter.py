@@ -12,7 +12,10 @@ def interpret(graph):
             node = graph.nodes[nodeid]
 
             if len(node.ul_args) >= node.minargs and set(node.l_args.keys()) >= node.req_kwargs:
-                ul_result, l_result = node.op.f(_take(node.ul_args, node.maxargs), node.l_args) 
+                used_args = _take(node.ul_args, node.maxargs)
+                ul_result, l_result = node.op.f(used_args, node.l_args) 
+                if isinstance(ul_result, Exception):
+                    raise type(ul_result)(f"Operator {node.op.name} on line {node.line_num} failed with args {used_args} and kwargs {node.l_args}, with error {l_result}")
 
                 if node.op.special_id == -2: # if TODO: should if only accept booleans or not?
                     if ul_result:
@@ -24,17 +27,18 @@ def interpret(graph):
 
                 elif node.op.special_id == -1: # case
                     val_to_id = {ast.literal_eval(text) if text != "else" else "else" : _id for text, _id in node.l_edge.items()}
-                    if ul_result in val_to_id:
-                        added_actives.add(val_to_id[ul_result])
-                    elif "else" in val_to_id:
-                        added_actives.add(val_to_id["else"])
+                    targetid = val_to_id.get(ul_result) or val_to_id.get("else")
+
+                    if targetid is not None:
+                        added_actives.add(targetid)
+                        graph.nodes[targetid].ul_args.append(ul_result)
 
                 else:
                     if ul_result is not None:
                         for targetid in node.ul_edge:
                             graph.nodes[targetid].ul_args.append(ul_result)
 
-                    for text, targetid in node.l_edge:
+                    for text, targetid in node.l_edge.items():
                         if text in l_result:
                             graph.nodes[targetid].l_args[text] = l_result[text]
                         elif ul_result is not None:
