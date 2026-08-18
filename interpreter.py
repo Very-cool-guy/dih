@@ -1,4 +1,5 @@
 import ast
+import errors
 
 def _take(l, n):
     return l if len(l) <= n else l[:n]
@@ -13,39 +14,42 @@ def interpret(graph):
 
             if len(node.ul_args) >= node.minargs and set(node.l_args.keys()) >= node.req_kwargs:
                 used_args = _take(node.ul_args, node.maxargs)
-                ul_result, l_result = node.op.f(used_args, node.l_args) 
-                if isinstance(ul_result, Exception):
-                    raise type(ul_result)(f"Operator {node.op.name} on line {node.line_num} failed with args {used_args} and kwargs {node.l_args}, with error {l_result}")
+                try:
+                    ul_result, l_result = node.op.f(used_args, node.l_args) 
+                except Exception as e:
+                    errors.clean_raise(RuntimeError(f"Operator {node.op.name} on line {node.line_num} failed with args {used_args} and kwargs {node.l_args}"))
+                    raise e
 
-                if node.op.special_id == -2: # if TODO: should if only accept booleans or not?
-                    if ul_result:
-                        if "y" in node.l_edge:
-                            added_actives.add(node.l_edge["y"])
-                    else:
-                        if "n" in node.l_edge:
-                            added_actives.add(node.l_edge["n"])
+                match node.op.name:
+                    case "if": # TODO: should if only accept booleans or not?
+                        if ul_result:
+                            if "y" in node.l_edge:
+                                added_actives.add(node.l_edge["y"])
+                        else:
+                            if "n" in node.l_edge:
+                                added_actives.add(node.l_edge["n"])
 
-                elif node.op.special_id == -1: # case
-                    val_to_id = {ast.literal_eval(text) if text != "else" else "else" : _id for text, _id in node.l_edge.items()}
-                    targetid = val_to_id.get(ul_result) or val_to_id.get("else")
+                    case "case":
+                        val_to_id = {ast.literal_eval(text) if text != "else" else "else" : _id for text, _id in node.l_edge.items()}
+                        targetid = val_to_id.get(ul_result) or val_to_id.get("else")
 
-                    if targetid is not None:
-                        added_actives.add(targetid)
-                        graph.nodes[targetid].ul_args.append(ul_result)
-
-                else:
-                    if ul_result is not None:
-                        for targetid in node.ul_edge:
+                        if targetid is not None:
+                            added_actives.add(targetid)
                             graph.nodes[targetid].ul_args.append(ul_result)
 
-                    for text, targetid in node.l_edge.items():
-                        if text in l_result:
-                            graph.nodes[targetid].l_args[text] = l_result[text]
-                        elif ul_result is not None:
-                            graph.nodes[targetid].l_args[text] = ul_result
+                    case _:
+                        if ul_result is not None:
+                            for targetid in node.ul_edge:
+                                graph.nodes[targetid].ul_args.append(ul_result)
 
-                    added_actives.update(node.ul_edge)
-                    added_actives.update(list(node.l_edge.values()))
+                        for text, targetid in node.l_edge.items():
+                            if text in l_result:
+                                graph.nodes[targetid].l_args[text] = l_result[text]
+                            elif ul_result is not None:
+                                graph.nodes[targetid].l_args[text] = ul_result
+
+                        added_actives.update(node.ul_edge)
+                        added_actives.update(list(node.l_edge.values()))
 
                 lazy_nodes.remove(nodeid) # nodes that do not meet requirements stay
                 node.ul_args = []

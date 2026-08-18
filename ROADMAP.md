@@ -9,10 +9,12 @@ YAYYYYYY
 
 # refinement
 - [ ] more operators including ones in the library, total library integration is probably impossible since i have to choose argument stuff
-- [ ] better errors
+- [x] better errors
 - [ ] subgraphs(functions)
-- [ ] graph visualisation tool (hard)
-- [ ] turn into compiler
+- [ ] gui ide & visualization (VERY HARD)
+- [ ] messages and triggers
+- [ ] composition of nodes; nodes as first-class values
+- [ ] oop support
 
 # smol
 - [x] syntax for changing minargs and req_kwargs
@@ -27,5 +29,4 @@ YAYYYYYY
 - [ ] match does not accept "else" or undictkeyable values
 - [x] make match return a value
 - [ ] *? operator family
-- [ ] composition of nodes
 - [ ] ALSO URGENT `[hi]Lit[7]` matches wrongly, whole thing gets consumed by the bracket group. making it lazy makes bracket group not match anything at all.

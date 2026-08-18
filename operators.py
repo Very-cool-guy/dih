@@ -5,13 +5,12 @@ inf = float('inf')
 empty = set()
 
 class Operator:
-    def __init__(self, f, minargs, maxargs, req_kwargs, name, special_id = 0):
+    def __init__(self, f, minargs, maxargs, req_kwargs, name):
         self.f = f
         self.minargs = minargs
         self.maxargs = maxargs
         self.req_kwargs = req_kwargs
         self.name = name
-        self.special_id = special_id
 
 class _CoolerDict(dict):
     def __missing__(self, key):
@@ -26,6 +25,6 @@ operators = _CoolerDict({
         "+": Operator(Utils.add, 2, inf, empty, "+"),
         "print": Operator(Utils._print, 1, inf, empty, "print"),
         "input": Operator(Utils._input, 0, inf, empty, "input"),
-        "match": Operator(Utils._match, 1, 1, empty, "match", -1),
-        "if": Operator(Utils._if, 1, 1, empty, "if", -2),
+        "match": Operator(Utils._match, 1, 1, empty, "match"),
+        "if": Operator(Utils._if, 1, 1, empty, "if"),
         })

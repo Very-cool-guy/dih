@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import argparse
+import sys
 from pathlib import Path
-import interpreter, parser
+import interpreter, parser, errors
 
 arg_parser = argparse.ArgumentParser(description = "simple cli for dih")
 
@@ -15,4 +16,8 @@ if (args.file is None) == (args.command is None):
 
 text = args.command if args.file is None else args.file.read_text()
 
-interpreter.interpret(parser.parse(text))
+try:
+    interpreter.interpret(parser.parse(text))
+except Exception as e:
+    errors.clean_raise(e)
+    sys.exit()

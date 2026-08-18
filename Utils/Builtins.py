@@ -1,10 +1,7 @@
 __all__ = ["add", "_print", "_input", "_match", "_if"]
 
 def add(args, kwargs):
-    try:
-        return sum(args), {}
-    except TypeError:
-        return TypeError(), "Cannot add objects of these types together"
+    return sum(args), {}
 
 def _print(args, kwargs):
     print(*args, **kwargs)
