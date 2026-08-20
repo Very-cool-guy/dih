@@ -1,0 +1,196 @@
+[
+  {
+    "type": "arrow",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "arrow_line",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "arrow",
+          "named": true
+        },
+        {
+          "type": "in_name",
+          "named": true
+        },
+        {
+          "type": "node_name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "in_name",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "nice",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "number",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "node_name",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "norm_line",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "in_name",
+          "named": true
+        },
+        {
+          "type": "nice",
+          "named": true
+        },
+        {
+          "type": "node_name",
+          "named": true
+        },
+        {
+          "type": "op",
+          "named": true
+        },
+        {
+          "type": "trail",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "source_file",
+    "named": true,
+    "root": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "arrow_line",
+          "named": true
+        },
+        {
+          "type": "norm_line",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "trail",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "trailtrail",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "trailtrail",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "trail_inner",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "\n",
+    "named": false
+  },
+  {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": ")",
+    "named": false
+  },
+  {
+    "type": ",",
+    "named": false
+  },
+  {
+    "type": "->",
+    "named": false
+  },
+  {
+    "type": "/",
+    "named": false
+  },
+  {
+    "type": "<-",
+    "named": false
+  },
+  {
+    "type": "[",
+    "named": false
+  },
+  {
+    "type": "]",
+    "named": false
+  },
+  {
+    "type": "number",
+    "named": true
+  },
+  {
+    "type": "op",
+    "named": true
+  },
+  {
+    "type": "trail_inner",
+    "named": true
+  },
+  {
+    "type": "{",
+    "named": false
+  },
+  {
+    "type": "}",
+    "named": false
+  }
+]

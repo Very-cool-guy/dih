@@ -1,0 +1,32 @@
+{
+  "grammars": [
+    {
+      "name": "dih",
+      "camelcase": "Dih",
+      "scope": "source.dih",
+      "path": ".",
+      "file-types": [
+        "dih"
+      ],
+      "highlights": "queries/highlights.scm"
+    }
+  ],
+  "metadata": {
+    "version": "0.0.1",
+    "license": "MIT",
+    "description": "Dih grammar for tree-sitter",
+    "authors": [
+      {
+        "name": "Lucas",
+        "email": "nope"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/Very-cool-guy/dih"
+    }
+  },
+  "bindings": {
+
+  }
+}
+
