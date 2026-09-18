@@ -22,7 +22,7 @@ class Node:
         self.line_num = line_num
 
     def __repr__(self): # for my use!!!
-        return str(self.__dict__)
+        return str(vars(self))
 
 class Graph:
     def __init__(self):
@@ -31,7 +31,7 @@ class Graph:
         self.active = set()
 
     def __repr__(self):
-        return '\n'.join(self.nodes[nodeid].__repr__() for nodeid in self.nodes)
+        return '\n'.join(repr(self.nodes[nodeid]) for nodeid in self.nodes)
 
     def add_node(self, node):
         self.nodes[node.instance_num] = node

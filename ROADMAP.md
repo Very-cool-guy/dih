@@ -8,7 +8,8 @@
 YAYYYYYY
 
 # refinement
-- [ ] more operators including ones in the library, total library integration is probably impossible since i have to choose argument stuff
+- [ ] more operators including ones in the library
+- [ ] full interop?
 - [x] better errors
 - [ ] subgraphs(functions)
 - [ ] gui ide & visualization (VERY HARD)
@@ -19,7 +20,7 @@ YAYYYYYY
 # smol
 - [x] syntax for changing minargs and req_kwargs
 - [ ] lines with standalone names or arrows with names on both sides
-- [ ] not possible for literal string to contain / or / to be an operator
+- [x] not possible for literal string to contain / or / to be an operator
 - [ ] multiple same name arrows from a node
 - [ ] revamp readme im serious!!!
 - [ ] type hint (duh)
@@ -29,4 +30,5 @@ YAYYYYYY
 - [ ] match does not accept "else" or undictkeyable values
 - [x] make match return a value
 - [ ] *? operator family
-- [ ] ALSO URGENT `[hi]Lit[7]` matches wrongly, whole thing gets consumed by the bracket group. making it lazy makes bracket group not match anything at all.
+- [x] ALSO URGENT `[hi]Lit[7]` matches wrongly, whole thing gets consumed by the bracket group. making it lazy makes bracket group not match anything at all.
+- [ ] warnings for failure to override arg reqs

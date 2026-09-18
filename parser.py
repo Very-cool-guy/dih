@@ -1,6 +1,4 @@
-import graph, operators
-
-import re
+import graph, operators, lexer
 
 def _add(l, elem, pos):
     if len(l) <= pos:
@@ -11,9 +9,6 @@ def _add(l, elem, pos):
 def parse(source):
     result = graph.Graph()
 
-    norm_pattern = re.compile(r'^(?>(\(.+\))?(\[.+\])?(\{\d+\})?)([^/]+)(?:/(\d*),(\d*),(.*))?$')
-    arrow_pattern = re.compile(r'^(->|<-)(\(.+\))?(\[.+\])$')
-
     source = [(len(line) - len(line.lstrip(' ')), line.lstrip(' ')) for line in source.split("\n")]
     assert source[0][0] == 0
 
@@ -22,18 +17,17 @@ def parse(source):
     line_num = 0
 
     for indent, content in source:
-        norm_match = re.search(norm_pattern, content)
-        arrow_match = re.search(arrow_pattern, content)
-
         line_num += 1
            
-        if arrow_match: # arrow match first otherwise will be consumed by .+ in the normal pattern
+        if not content:
+            pass
+
+        elif tokens := lexer.lex_arrow(content): # arrow match first otherwise will be consumed by .+ in the normal pattern
             if not indent:
                 raise SyntaxError(f"Top-level node in line {line_num} cannot use arrow notation")
 
             elif indent <= last_indent_num + 1: # this handles both one more indent and less indents
-                vals = [arrow_match.group(i) for i in range(1, 4)]
-                arrow, in_ledge, node_name = [val[1:-1] if i != 1 and val is not None else val for i, val in enumerate(vals, start=1)] # bad code!!!
+                arrow, in_ledge, node_name = tokens
 
                 old_id = last_indents[indent - 1]
                 try:
@@ -54,9 +48,8 @@ def parse(source):
             else:
                 raise SyntaxError(f"Line {line_num} cannot indent more than one space more than previous line")
 
-        elif norm_match:
-            vals = [norm_match.group(i) for i in range(1, 8)]
-            in_ledge, node_name, nice, op, minargs, maxargs, req_kwargs = [val[1:-1] if i < 4 and val is not None else val for i, val in enumerate(vals, start=1)]
+        elif tokens := lexer.lex_normal(content, line_num): # unfailable; here to maintain program structure.
+            in_ledge, node_name, nice, op, minargs, maxargs, req_kwargs = tokens
 
             if indent <= last_indent_num + 1:
                 try:
@@ -76,7 +69,7 @@ def parse(source):
                     _add(last_indents, new_id, indent)
 
                 else:
-                    if in_ledge is not None:
+                    if in_ledge:
                         raise SyntaxError(f"Top-level node in line {line_num} can not label arrows pointing towards it")
                     last_indents = [new_id] # pops everything from the last indents registry
                     result.active.add(new_id)
@@ -84,7 +77,4 @@ def parse(source):
             else:
                 raise SyntaxError(f"Line {line_num} cannot indent more than one space more than previous line")
 
-        elif content:
-            raise SyntaxError(f"Parsing failure in line {line_num}")
-        
     return result
