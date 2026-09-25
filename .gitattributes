@@ -1,3 +1,5 @@
 tree-sitter-dih/src/** linguist-generated
+tree-sitter-dih/bindings/python/** linguist-generated
+tree-sitter-dih/setup.py linguist-generated
 tree-sitter-dih/grammar.js linguist-language=Tree-sitter-Query
 # tree-sitter dsl is closer to tree-sitter than javascript! i will not go down in history as having written such repulsive language as the latter
