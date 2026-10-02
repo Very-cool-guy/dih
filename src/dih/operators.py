@@ -1,5 +1,5 @@
 import ast
-import Utils
+from . import Utils
 
 inf = float('inf')
 empty = set()

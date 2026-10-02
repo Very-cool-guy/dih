@@ -1,0 +1,29 @@
+[project] # i added every field on the guide lol.
+name = "dih"
+version = "0.0a0"
+description = "The dih programming language"
+keywords = ["language", "graph"]
+readme = "README.md"
+authors = [
+    {name = "Lucas Cutecat"}
+]
+license = "WTFNMFPL"
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Topic :: Software Development :: Interpreters"
+]
+requires-python = ">=3.14"
+dependencies = []
+
+[project.optional-dependencies]
+gui = []
+
+[project.urls]
+Repository = "https://github.com/Very-cool-guy/dih.git"
+
+[project.scripts]
+dih = "dih.main:main"
+
+[build-system]
+requires = ["uv_build>=0.12.21,<0.13.0"]
+build-backend = "uv_build"

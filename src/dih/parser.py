@@ -1,4 +1,4 @@
-import graph, operators
+from . import graph, operators
 
 import re
 

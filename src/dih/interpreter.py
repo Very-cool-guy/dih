@@ -1,5 +1,5 @@
 import ast
-import errors
+from . import errors
 
 def _take(l, n):
     return l if len(l) <= n else l[:n]
