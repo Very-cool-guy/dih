@@ -1,5 +1,5 @@
 # the dih programming language
-The dih (short for "directed") programming language is probably the first language based on graphs.
+Dih (**di**rected **h**igh-level language) is probably the first programming language based on graphs.
 
 ## the graph
 In dih, a program is a directed graph with labeled and unlabeled edges. You can think of nodes as operators, and edges as passing information between them. Labeled edges basically pipe keyword arguments, while unlabeled ones pipe unnamed arguments.

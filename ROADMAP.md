@@ -16,6 +16,7 @@ YAYYYYYY
 - [ ] messages and triggers
 - [ ] composition of nodes; nodes as first-class values
 - [ ] oop support
+- [ ] make syntax less terrible: non-indentation based, and anything but that suffix notation!
 
 # smol
 - [x] syntax for changing minargs and req_kwargs
@@ -32,3 +33,4 @@ YAYYYYYY
 - [ ] *? operator family
 - [x] ALSO URGENT `[hi]Lit[7]` matches wrongly, whole thing gets consumed by the bracket group. making it lazy makes bracket group not match anything at all.
 - [ ] warnings for failure to override arg reqs
+- [ ] docstrings
