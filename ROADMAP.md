@@ -1,36 +1,39 @@
-# basic
+# Make a working one
 - [x] make basic graph and node class
 - [x] make basic operator class
 - [x] make basic source to graph parser
 - [x] make basic graph interpreter
-- [x] make main wrapper
+- [x] make main wrapper - YAYYYY!
 
-YAYYYYYY
-
-# refinement
-- [ ] more operators including ones in the library
-- [ ] full interop?
+# v0 release
+## Major
 - [x] better errors
+- [x] overriding minargs and req_kwargs
+- [x] type hint (duh)
+- [x] if and match
+- [x] docstrings
+- [ ] conceptualize and (maybe) implement full python interop
+- [ ] gui: highlighted editor and graph visualisation on the left. no visual debug/run this release.
+## Minor
+- [x] not possible for literal string to contain / or / to be an operator
+- [x] better way to allow empty returns
+- [x] `[hi]Lit[7]` matches wrongly, whole thing gets consumed by the bracket group. making it lazy makes bracket group not match anything at all.
+- [x] unproduced labelled arrow gives the unlabeled result instead of throwing
+- [x] make match return a value
+
+# Major; not now
 - [ ] subgraphs(functions)
-- [ ] gui ide & visualization (VERY HARD)
 - [ ] messages and triggers
 - [ ] composition of nodes; nodes as first-class values
 - [ ] oop support
 - [ ] make syntax less terrible: non-indentation based, and anything but that suffix notation!
+- [ ] continue on the gui
 
-# smol
-- [x] syntax for changing minargs and req_kwargs
+# Minor; not now
 - [ ] lines with standalone names or arrows with names on both sides
-- [x] not possible for literal string to contain / or / to be an operator
 - [ ] multiple same name arrows from a node
-- [ ] revamp readme im serious!!!
-- [x] type hint (duh)
-- [x] (URGENT) change behaviour of unproduced labelled arrow from throwing an error to making giving the produced unlabeled result
-- [x] better way to allow empty returns
-- [x] if and match
+- [ ] revamp readme!!!
 - [ ] match does not accept "else" or undictkeyable values
-- [x] make match return a value
 - [ ] *? operator family
-- [x] ALSO URGENT `[hi]Lit[7]` matches wrongly, whole thing gets consumed by the bracket group. making it lazy makes bracket group not match anything at all.
 - [ ] warnings for failure to override arg reqs
-- [x] docstrings
+- [ ] the tree-sitter seems to name newlines as nodes? should i care?

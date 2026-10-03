@@ -16,7 +16,11 @@ requires-python = ">=3.14"
 dependencies = []
 
 [project.optional-dependencies]
-gui = []
+gui = [
+    "pyqt6>=6.11.0",
+    "tree-sitter>=0.26.0",
+    "tree-sitter-dih",
+]
 
 [project.urls]
 Repository = "https://github.com/Very-cool-guy/dih.git"
@@ -27,3 +31,11 @@ dih = "dih.main:main"
 [build-system]
 requires = ["uv_build>=0.12.21,<0.13.0"]
 build-backend = "uv_build"
+
+[tool.uv.workspace]
+members = [
+    "tree-sitter-dih",
+]
+
+[tool.uv.sources]
+tree-sitter-dih = { workspace = true, editable = true }
