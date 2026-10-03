@@ -1,4 +1,5 @@
 class Node:
+    """Model of a dih node, owned by a graph."""
     _count = 1
 
     def __init__(self, op, name, nice, minargs, maxargs, req_kwargs, line_num):
@@ -25,6 +26,7 @@ class Node:
         return str(vars(self))
 
 class Graph:
+    """Model of a dih graph."""
     def __init__(self):
         self.nodes = {} # instance num to node
         self.registry = {} # name to instance num
@@ -34,6 +36,7 @@ class Graph:
         return '\n'.join(repr(self.nodes[nodeid]) for nodeid in self.nodes)
 
     def add_node(self, node):
+        """Add a pre-constructed node to the graph."""
         self.nodes[node.instance_num] = node
         if node.name != "":
             if node.name in self.registry:
@@ -42,6 +45,7 @@ class Graph:
                 self.registry[node.name] = node.instance_num
 
     def connect(self, node_num1, node_num2, text = None): # missing node is handled by parser
+        "Connect two nodes in the graph."
         if text is not None:
             self.nodes[node_num1].l_edge[text] = node_num2
         else:

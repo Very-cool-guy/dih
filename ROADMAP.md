@@ -33,4 +33,4 @@ YAYYYYYY
 - [ ] *? operator family
 - [x] ALSO URGENT `[hi]Lit[7]` matches wrongly, whole thing gets consumed by the bracket group. making it lazy makes bracket group not match anything at all.
 - [ ] warnings for failure to override arg reqs
-- [ ] docstrings
+- [x] docstrings

@@ -3,12 +3,14 @@ from . import graph, operators
 import re
 
 def _add(l, elem, pos):
+    """Internal helper to insert an element in any index of a list, appending if out of bounds."""
     if len(l) <= pos:
         l.append(elem)
     else:
         l[pos] = elem
 
 def parse(source):
+    """Parse source code into graph object."""
     result = graph.Graph()
 
     norm_pattern = re.compile(r'^(?>(\(.+?\))?(\[.+?\])?(\{\d+?\})?)(.+?)(?:/(\d*),(\d*),(.*))?$')

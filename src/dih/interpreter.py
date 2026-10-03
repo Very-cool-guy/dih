@@ -2,9 +2,11 @@ import ast
 from . import errors
 
 def _take(l, n):
+    """Internal helper to slice any number of elements from a list, returning the whole list if out of bounds."""
     return l if len(l) <= n else l[:n]
 
 def interpret(graph):
+    """Interprets a graph object, the main runner of dih."""
     while graph.active:
         new_actives = set()
 

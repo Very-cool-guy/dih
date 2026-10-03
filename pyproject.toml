@@ -1,13 +1,13 @@
 [project] # i added every field on the guide lol.
 name = "dih"
-version = "0.0a0"
+version = "0"
 description = "The dih programming language"
 keywords = ["language", "graph"]
 readme = "README.md"
 authors = [
     {name = "Lucas Cutecat"}
 ]
-license = "WTFNMFPL"
+license = "WTFPL"
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Topic :: Software Development :: Interpreters"

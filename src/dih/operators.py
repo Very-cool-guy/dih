@@ -5,6 +5,7 @@ inf = float('inf')
 empty = set()
 
 class Operator:
+    """Model of an operator, which is owned by a graph node."""
     def __init__(self, f, minargs, maxargs, req_kwargs, name):
         self.f = f
         self.minargs = minargs
@@ -13,6 +14,7 @@ class Operator:
         self.name = name
 
 class _CoolerDict(dict):
+    """Dict wrapper for the operators registry for custom missing behaviour."""
     def __missing__(self, key):
         if key.startswith("Lit[") and key.endswith("]"):
             result = ast.literal_eval(key[4:-1])# TODO: think about expressions to disallow
