@@ -2,28 +2,28 @@ from . import graph, operators
 
 import re
 
-def _add(l, elem, pos):
+def _add(l: list[int], elem: int, pos: int) -> None:
     """Internal helper to insert an element in any index of a list, appending if out of bounds."""
     if len(l) <= pos:
         l.append(elem)
     else:
         l[pos] = elem
 
-def parse(source):
+def parse(source: str) -> graph.Graph:
     """Parse source code into graph object."""
     result = graph.Graph()
 
     norm_pattern = re.compile(r'^(?>(\(.+?\))?(\[.+?\])?(\{\d+?\})?)(.+?)(?:/(\d*),(\d*),(.*))?$')
     arrow_pattern = re.compile(r'^(->|<-)(\(.+\))?(\[.+\])$')
 
-    source = [(len(line) - len(line.lstrip(' ')), line.lstrip(' ')) for line in source.split("\n")]
-    assert source[0][0] == 0
+    source_lines = [(len(line) - len(line.lstrip(' ')), line.lstrip(' ')) for line in source.split("\n")]
+    assert source_lines[0][0] == 0
 
     last_indents = []
     last_indent_num = -1
     line_num = 0
 
-    for indent, content in source:
+    for indent, content in source_lines:
         norm_match = re.search(norm_pattern, content)
         arrow_match = re.search(arrow_pattern, content)
 
@@ -36,6 +36,7 @@ def parse(source):
             elif indent <= last_indent_num + 1: # this handles both one more indent and less indents
                 vals = [arrow_match.group(i) for i in range(1, 4)]
                 arrow, in_ledge, node_name = [val[1:-1] if i != 1 and val is not None else val for i, val in enumerate(vals, start=1)] # bad code!!!
+                assert node_name is not None
 
                 old_id = last_indents[indent - 1]
                 try:
@@ -59,9 +60,9 @@ def parse(source):
         elif norm_match:
             vals = [norm_match.group(i) for i in range(1, 8)]
             in_ledge, node_name, nice, op, minargs, maxargs, req_kwargs = [val[1:-1] if i < 4 and val is not None else val for i, val in enumerate(vals, start=1)]
+            assert op is not None
 
             if indent <= last_indent_num + 1:
-                assert op is not None # to appease the pyright gods, i guess.
                 try:
                     operator = operators.operators[op.strip()]
                 except NameError:

@@ -1,11 +1,15 @@
 import ast
-from . import errors
+from . import errors, graph
 
-def _take(l, n):
+def _take(l: list, n: int | float) -> list:
     """Internal helper to slice any number of elements from a list, returning the whole list if out of bounds."""
-    return l if len(l) <= n else l[:n]
+    if len(l) <= n:
+        return l
+    else:
+        assert isinstance(n, int)
+        return l[:n]
 
-def interpret(graph):
+def interpret(graph: graph.Graph) -> None:
     """Interprets a graph object, the main runner of dih."""
     while graph.active:
         new_actives = set()

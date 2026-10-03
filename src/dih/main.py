@@ -9,7 +9,7 @@ arg_parser = argparse.ArgumentParser(description = "simple cli for dih")
 arg_parser.add_argument("file", nargs = "?", help = "dih code file to run", type = Path)
 arg_parser.add_argument("-c", "--command", help = "dih code text to run")
 
-def main():
+def main() -> None:
     """Entry point of the dih cli."""
     args = arg_parser.parse_args()
 

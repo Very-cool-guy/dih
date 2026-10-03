@@ -24,7 +24,7 @@ YAYYYYYY
 - [x] not possible for literal string to contain / or / to be an operator
 - [ ] multiple same name arrows from a node
 - [ ] revamp readme im serious!!!
-- [ ] type hint (duh)
+- [x] type hint (duh)
 - [x] (URGENT) change behaviour of unproduced labelled arrow from throwing an error to making giving the produced unlabeled result
 - [x] better way to allow empty returns
 - [x] if and match
