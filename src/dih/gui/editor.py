@@ -32,11 +32,11 @@ STYLES = {
 
 
 # hate text encodings btw when i say byte i mean utf8 and when i say unicode i mean utf16
-def _bytes_to_point(source: bytes, pos: int) -> Point:
+def _bytes_to_point(source: bytes, pos: int) -> tuple[int, int]:
     """Convert position in text given by byte number to Point"""
     row = source.count(b"\n", 0, pos)
     column = pos - (source.rfind(b"\n", 0, pos) + 1)
-    return Point(row, column)
+    return row, column
 
 def _point_to_bytes(source: bytes, point: Point) -> int:
     """Convert position in text given by Point to byte number"""
