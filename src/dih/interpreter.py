@@ -3,11 +3,7 @@ from . import errors, graph
 
 def _take(l: list, n: int | float) -> list:
     """Internal helper to slice any number of elements from a list, returning the whole list if out of bounds."""
-    if len(l) <= n:
-        return l
-    else:
-        assert isinstance(n, int)
-        return l[:n]
+    return l if len(l) <= n else l[:n] # pyright: ignore
 
 def interpret(graph: graph.Graph) -> None:
     """Interprets a graph object, the main runner of dih."""

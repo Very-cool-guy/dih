@@ -10,7 +10,7 @@ from pathlib import Path
 DIH_LANGUAGE = Language(tsdih.language())
 
 parser = Parser(DIH_LANGUAGE)
-query_file = Path(__file__).parent.parent.parent / "tree-sitter-dih" / "queries" / "highlights.scm" # lord help me.
+query_file = Path(__file__).parent.parent.parent.parent / "tree-sitter-dih" / "queries" / "highlights.scm" # lord help me.
 query = Query(DIH_LANGUAGE, query_file.read_text())
 query_cursor = QueryCursor(query)
 
@@ -57,16 +57,36 @@ def _unicode_to_bytes(source: str, pos: int) -> int:
 
 
 class DihEditor(QPlainTextEdit):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.doc = self.document()
-        assert self.doc is not None
-
         self.text_cursor = QTextCursor(self.doc)
         self.tree = parser.parse(b"") # open file or string later
 
-        self.doc.contentsChange.connect(self.on_contents_changed)
+        self.doc.contentsChange.connect(self.on_contents_changed) # pyright: ignore
 
     def on_contents_changed(self, start, removed, added):
-        ...
+        text = self.doc.toPlainText() # pyright: ignore
+        text_bytes = text.encode("utf-8")
+
+        start_byte = _unicode_to_bytes(text, start)
+        old_end_byte = _unicode_to_bytes(text, start+removed)
+        new_end_byte = _unicode_to_bytes(text, start+added)
+        self.tree.edit(
+            start_byte=start_byte, old_end_byte=old_end_byte, new_end_byte=new_end_byte,
+            start_point = _bytes_to_point(text_bytes, start_byte),
+            old_end_point = _bytes_to_point(text_bytes, old_end_byte),
+            new_end_point = _bytes_to_point(text_bytes, new_end_byte)
+        )
+        self.tree = parser.parse(text.encode("utf-8"), self.tree)
+
+        captures = query_cursor.captures(self.tree.root_node)
+        for capture in captures.keys():
+            for node in captures[capture]:
+                start_char = _bytes_to_unicode(text_bytes, node.start_byte)
+                end_char = _bytes_to_unicode(text_bytes, node.end_byte)
+
+                self.text_cursor.setPosition(start_char, QTextCursor.MoveMode.MoveAnchor)
+                self.text_cursor.setPosition(end_char, QTextCursor.MoveMode.KeepAnchor)
+                self.text_cursor.setCharFormat(STYLES[capture])

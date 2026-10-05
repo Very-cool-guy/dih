@@ -36,11 +36,10 @@ def parse(source: str) -> graph.Graph:
             elif indent <= last_indent_num + 1: # this handles both one more indent and less indents
                 vals = [arrow_match.group(i) for i in range(1, 4)]
                 arrow, in_ledge, node_name = [val[1:-1] if i != 1 and val is not None else val for i, val in enumerate(vals, start=1)] # bad code!!!
-                assert node_name is not None
 
                 old_id = last_indents[indent - 1]
                 try:
-                    new_id = result.registry[node_name]
+                    new_id = result.registry[node_name] # pyright: ignore
                 except KeyError:
                     raise NameError(f"Node {node_name} does not exist in line {line_num}")
 
@@ -60,13 +59,13 @@ def parse(source: str) -> graph.Graph:
         elif norm_match:
             vals = [norm_match.group(i) for i in range(1, 8)]
             in_ledge, node_name, nice, op, minargs, maxargs, req_kwargs = [val[1:-1] if i < 4 and val is not None else val for i, val in enumerate(vals, start=1)]
-            assert op is not None
 
             if indent <= last_indent_num + 1:
+                op_name = op.strip() # pyright: ignore
                 try:
-                    operator = operators.operators[op.strip()]
+                    operator = operators.operators[op_name]
                 except NameError:
-                    raise NameError(f"Unknown operator {op.strip()} in line {line_num}")
+                    raise NameError(f"Unknown operator {op_name} in line {line_num}")
                 new_node =  graph.Node(operator, node_name, nice, minargs, maxargs, req_kwargs, line_num)
                 try:
                     result.add_node(new_node)
