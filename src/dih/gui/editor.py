@@ -1,3 +1,4 @@
+from PyQt6.QtCore import QSignalBlocker
 from PyQt6.QtGui import QColor, QTextCharFormat, QTextCursor
 from PyQt6.QtWidgets import QPlainTextEdit
 
@@ -74,14 +75,19 @@ class DihEditor(QPlainTextEdit):
             old_end_point = _bytes_to_point(text_bytes, old_end_byte),
             new_end_point = _bytes_to_point(text_bytes, new_end_byte)
         )
+
         self.tree = parser.parse(text_bytes, self.tree)
-
         captures = query_cursor.captures(self.tree.root_node)
-        for capture in captures.keys():
-            for node in captures[capture]:
-                start_char = _bytes_to_unicode(text_bytes, node.start_byte)
-                end_char = _bytes_to_unicode(text_bytes, node.end_byte)
 
-                self.text_cursor.setPosition(start_char, QTextCursor.MoveMode.MoveAnchor)
-                self.text_cursor.setPosition(end_char, QTextCursor.MoveMode.KeepAnchor)
-                self.text_cursor.setCharFormat(STYLES[capture])
+        with QSignalBlocker(self.doc):
+            self.text_cursor.select(QTextCursor.SelectionType.Document)
+            self.text_cursor.setCharFormat(QTextCharFormat())
+
+            for capture in captures.keys():
+                for node in captures[capture]:
+                    start_char = _bytes_to_unicode(text_bytes, node.start_byte)
+                    end_char = _bytes_to_unicode(text_bytes, node.end_byte)
+
+                    self.text_cursor.setPosition(start_char, QTextCursor.MoveMode.MoveAnchor)
+                    self.text_cursor.setPosition(end_char, QTextCursor.MoveMode.KeepAnchor)
+                    self.text_cursor.setCharFormat(STYLES[capture])

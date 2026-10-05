@@ -27,6 +27,7 @@ Repository = "https://github.com/Very-cool-guy/dih.git"
 
 [project.scripts]
 dih = "dih.main:main"
+drdih = "dih.gui.main:main"
 
 [build-system]
 requires = ["uv_build>=0.12.21,<0.13.0"]

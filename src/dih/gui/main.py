@@ -1,4 +1,5 @@
-from gui import editor
+# temporary placeholder
+from . import editor
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow
 
@@ -8,7 +9,8 @@ class MainWindow(QMainWindow):
         self.editor = editor.DihEditor()
         self.setCentralWidget(self.editor)
 
-app = QApplication(sys.argv)
-window = MainWindow()
-window.show()
-app.exec()
+def main():
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    app.exec()

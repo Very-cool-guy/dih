@@ -20,8 +20,8 @@
 - [x] `[hi]Lit[7]` matches wrongly, whole thing gets consumed by the bracket group. making it lazy makes bracket group not match anything at all.
 - [x] unproduced labelled arrow gives the unlabeled result instead of throwing
 - [x] make match return a value
-- [ ] gui: fix broken highlighting due to lack of context of tree.edit, but probably dont reparse entirely
-- [ ] gui: fix the annoying attempted relative import without parent package!!! annoying!!!
+- [x] gui: fix broken highlighting
+- [x] gui: fix the annoying attempted relative import without parent package!!! annoying!!!
 
 # Major; not now
 - [ ] subgraphs(functions)
