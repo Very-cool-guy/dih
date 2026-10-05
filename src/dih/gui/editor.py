@@ -38,13 +38,6 @@ def _bytes_to_point(source: bytes, pos: int) -> tuple[int, int]:
     column = pos - (source.rfind(b"\n", 0, pos) + 1)
     return row, column
 
-def _point_to_bytes(source: bytes, point: Point) -> int:
-    """Convert position in text given by Point to byte number"""
-    lines = source.split(b"\n")
-    row = point.row
-    column = point.column
-    return sum(len(line) + 1 for line in lines[:row]) + column
-
 def _bytes_to_unicode(source: bytes, pos: int) -> int:
     """Convert position in text given by byte number to unicode number"""
     prefix = source[:pos]
@@ -57,6 +50,7 @@ def _unicode_to_bytes(source: str, pos: int) -> int:
 
 
 class DihEditor(QPlainTextEdit):
+    """QPlainTextEdit overridden to syntax highlight dih code. Does not use QSyntaxHighlighter even though you're probably supposed to."""
     def __init__(self) -> None:
         super().__init__()
 
@@ -66,7 +60,8 @@ class DihEditor(QPlainTextEdit):
 
         self.doc.contentsChange.connect(self.on_contents_changed) # pyright: ignore
 
-    def on_contents_changed(self, start, removed, added):
+    def on_contents_changed(self, start: int, removed: int, added: int) -> None:
+        """Edit tree, highlight and apply changes"""
         text = self.doc.toPlainText() # pyright: ignore
         text_bytes = text.encode("utf-8")
 
@@ -79,7 +74,7 @@ class DihEditor(QPlainTextEdit):
             old_end_point = _bytes_to_point(text_bytes, old_end_byte),
             new_end_point = _bytes_to_point(text_bytes, new_end_byte)
         )
-        self.tree = parser.parse(text.encode("utf-8"), self.tree)
+        self.tree = parser.parse(text_bytes, self.tree)
 
         captures = query_cursor.captures(self.tree.root_node)
         for capture in captures.keys():
