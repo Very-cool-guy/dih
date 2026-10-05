@@ -22,6 +22,7 @@
 - [x] make match return a value
 - [x] gui: fix broken highlighting
 - [x] gui: fix the annoying attempted relative import without parent package!!! annoying!!!
+- [x] gui: it crashes when i enter an emoji! wonderful!
 
 # Major; not now
 - [ ] subgraphs(functions)

@@ -33,6 +33,7 @@ STYLES = {
 
 
 # hate text encodings btw when i say byte i mean utf8 and when i say unicode i mean utf16
+# credits: ColinKennedy/tree-sitter-usd, https://stackoverflow.com/questions/63986913/converting-an-utf-16-index-to-a-utf-8-compatible-one
 def _bytes_to_point(source: bytes, pos: int) -> tuple[int, int]:
     """Convert position in text given by byte number to Point"""
     row = source.count(b"\n", 0, pos)
@@ -46,8 +47,15 @@ def _bytes_to_unicode(source: bytes, pos: int) -> int:
 
 def _unicode_to_bytes(source: str, pos: int) -> int:
     """Convert position in text given by unicode number to byte number"""
-    prefix = source.encode("utf-16-le")[:pos*2]
-    return len(prefix.decode("utf-16-le").encode("utf-8"))
+    unicode_pos = 0
+    byte_pos = 0
+
+    for character in source:
+        unicode_pos += len(character.encode("utf-16-le")) // 2
+        if unicode_pos > pos:
+            break
+        byte_pos += len(character.encode("utf-8"))
+    return byte_pos
 
 
 class DihEditor(QPlainTextEdit):
