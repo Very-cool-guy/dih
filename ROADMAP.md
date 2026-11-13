@@ -12,7 +12,8 @@
 - [x] type hint (duh)
 - [x] if and match
 - [x] docstrings
-- [ ] conceptualize and (maybe) implement full python interop
+- [ ] call python from dih
+- [ ] overriding mechanism in header
 - [ ] gui: highlighted editor and graph visualisation on the left. no visual debug/run this release.
 ## Minor
 - [x] not possible for literal string to contain / or / to be an operator
@@ -31,6 +32,8 @@
 - [ ] oop support
 - [ ] make syntax less terrible: non-indentation based, and anything but that suffix notation!
 - [ ] continue on the gui
+- [ ] call dih from python; call dih from dih
+- [ ] what should be active node? target of arrow line does not remove from active nodes
 
 # Minor; not now
 - [ ] lines with standalone names or arrows with names on both sides
@@ -40,3 +43,5 @@
 - [ ] *? operator family
 - [ ] warnings for failure to override arg reqs
 - [ ] the tree-sitter seems to name newlines as nodes? should i care?
+- [ ] whitespace tolerancy
+- [ ] AOT parsing cuz its probably pretty slow

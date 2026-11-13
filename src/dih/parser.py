@@ -1,6 +1,11 @@
 from . import graph, operators
 
 import re
+import importlib
+import builtins
+
+from types import ModuleType
+from collections.abc import Callable
 
 def _add(l: list[int], elem: int, pos: int) -> None:
     """Internal helper to insert an element in any index of a list, appending if out of bounds."""
@@ -9,6 +14,42 @@ def _add(l: list[int], elem: int, pos: int) -> None:
     else:
         l[pos] = elem
 
+def _get_funcs(mod: ModuleType) -> dict[str, Callable]:
+    """Get dict of all functions from a module and their names"""
+    return {func: getattr(mod, func) for func in dir(mod) if not func.startswith("_")}
+
+def preparse(source: str) -> tuple[list[tuple[int, str]], int, dict[str, ModuleType], dict[str, Callable]]: # pyright: ignore
+    """Handles headers. Currently this only includes imports"""
+    source_lines = [(len(line) - len(line.lstrip(' ')), line.lstrip(' ')) for line in source.split("\n")]
+    line_num = 0
+    mod_dict = {}
+    func_dict = _get_funcs(builtins)
+    if source_lines[0][0] != 0:
+        raise SyntaxError("First line can not have indents")
+
+    mod_pattern = re.compile(r"^(.+?)(?: -as (.+?))?(?: -refer (.+))?$")
+
+    for indent, content in source_lines:
+        if indent == 0:
+            if content and content != "-import":
+                return source_lines, line_num, mod_dict, func_dict
+        else: # this branch must be a module import, otherwise the function would have returned or raised.
+            mod_match = re.search(mod_pattern, content)
+            if mod_match:
+                mod, nick, refer = [mod_match.group(i) for i in range(1, 4)]
+                mod_name = nick if nick is not None else mod
+                module = importlib.import_module(mod)
+                mod_dict |= {mod_name: module}
+                
+                if refer == "-all":
+                    func_dict |= _get_funcs(module)
+                elif refer:
+                    func_dict |= {func.strip(): getattr(module, func.strip()) for func in refer.split(",")}
+            else:
+                raise SyntaxError(f"Invalid import at line {line_num}")
+
+        line_num += 1
+
 def parse(source: str) -> graph.Graph:
     """Parse source code into graph object."""
     result = graph.Graph()
@@ -16,19 +57,16 @@ def parse(source: str) -> graph.Graph:
     norm_pattern = re.compile(r'^(?>(\(.+?\))?(\[.+?\])?(\{\d+?\})?)(.+?)(?:/(\d*),(\d*),(.*))?$')
     arrow_pattern = re.compile(r'^(->|<-)(\(.+\))?(\[.+\])$')
 
-    source_lines = [(len(line) - len(line.lstrip(' ')), line.lstrip(' ')) for line in source.split("\n")]
-    assert source_lines[0][0] == 0
-
+    source_lines, line_num, mod_dict, func_dict = preparse(source)
     last_indents = []
     last_indent_num = -1
-    line_num = 0
 
-    for indent, content in source_lines:
+    for indent, content in source_lines[line_num:]:
         norm_match = re.search(norm_pattern, content)
         arrow_match = re.search(arrow_pattern, content)
 
         line_num += 1
-           
+
         if arrow_match: # arrow match first otherwise will be consumed by .+ in the normal pattern
             if not indent:
                 raise SyntaxError(f"Top-level node in line {line_num} cannot use arrow notation")
@@ -63,7 +101,7 @@ def parse(source: str) -> graph.Graph:
             if indent <= last_indent_num + 1:
                 op_name = op.strip() # pyright: ignore
                 try:
-                    operator = operators.operators[op_name]
+                    operator = operators.get_op(op_name, mod_dict, func_dict)
                 except NameError:
                     raise NameError(f"Unknown operator {op_name} in line {line_num}")
                 new_node =  graph.Node(operator, node_name, nice, minargs, maxargs, req_kwargs, line_num)
